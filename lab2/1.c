@@ -1,73 +1,59 @@
+/* Q1 : Find the frequency of elements in a randomly generated array which contains
+ some duplicate elements. */ 
+
 #include<stdio.h>
-#include<string.h>
-#include<conio.h>
 #include<stdlib.h>
 
-int printRandoms(int lower, int upper,
-                            int count)
-{
+void randoms(int upper, int count, int *arr){
+    int lower = 1;
     int i;
     for (i = 0; i < count; i++) {
-        int num = (rand() %
-        (upper - lower + 1)) + lower;
-        return num;
+        int num = (rand() % (upper - lower + 1)) + lower;
+        arr[i] = num;
     }
 }
- 
 
-int main()
-{ 
-int arr[5];
-printf("The array is: ");
- for(int i = 0 ; i<5; i++){
-    arr[i]=printRandoms(1, 4 , 1);
-    printf("%d ",arr[i]);
- }
-int arr2[5];
-//copying the array
-for (int i = 0 ; i <5; i++){
- arr2[i]= arr[i];
-}
-int arr3[5];
-int count=0;
-//checking for dupes
-for (int i = 0 ; i<5; i++){
-    for (int j = 0; j<5; j++){
-        if (arr[i]==arr[j]){
-            count++;
+int MaxFrequency(int *array, int n)  {
+    int i, j, maxElement, count;
+    int maxCount = 0;
+    for (i = 0; i < n; i++){
+        count = 1;
+        for(j = i+1; j < n; j++) {
+            if(array[j] == array[i]) {
+                count++;
+                if(count > maxCount) {
+                    maxElement = array[j];
+                    maxCount = count;
+                }
+            }
         }
-        
     }
-    arr3[i]=count;
-    count=0;
+    return maxElement;
 }
-//printing array 3
-// for (int i=0; i<5;i++){
-//     printf("%d ",arr3[i]);
-// }
 
-
-
-
-// no of elemets that repeats
-int count2=0;
-for (int i= 0 ; i<5; i++){
-    if (arr3[i]!=1){
-        count2++;
+int duplicates(int *arr, int n) {
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if(arr[i] == arr[j]) {
+                ans++;
+                break;
+            }
+        }
     }
+    return ans;
 }
-printf("\nthe number of dupes is : %d",count2);
-if(count2!=0)
-{
-//printing the max in array
-int max = 0;
-int k=0;
-for(int k = 0 ; k<5; k++)
-{
-    if (arr3[k]>=max){
-        max= k;
+
+int main() {
+    int n = 10;
+    int arr[n];
+    randoms(8, n, arr);
+    printf("The array is:-\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
     }
-}
-printf("The most repeating element is %d ",arr[k]);}
-return 0;
+    printf("\n");
+    printf("Number of duplications are:-\n%d \n", duplicates(arr, n));
+    printf("Maximum repeating element is %d\n", MaxFrequency(arr, n));
+    return 0;
 }
