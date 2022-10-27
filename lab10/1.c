@@ -48,8 +48,8 @@ void lcsAlgo() {
   }
 
   // Printing the sub sequences
-  printf("S1 : %s \nS2 : %s \n", S1, S2);
-  printf("The LCS of HUMAN and CHIMPANZEE is %s", lcsAlgo);
+  // printf("S1 : %s \nS2 : %s \n", S1, S2);
+  printf("The LCS of %s and %s is %s",S1,S2,lcsAlgo);
 }
 
 int main() {
