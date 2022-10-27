@@ -16,7 +16,7 @@ void lcsAlgo() {
   for (i = 0; i <= n; i++)
     LCS_table[0][i] = 0;
 
-  // Building the mtrix in bottom-up way
+  // Building the matrix in bottom-up way
   for (i = 1; i <= m; i++)
     for (j = 1; j <= n; j++) {
       if (S1[i - 1] == S2[j - 1]) {
