@@ -1,47 +1,76 @@
-// C code to implement the
-// matrix chain multiplication using recursion
-
-#include <limits.h>
 #include <stdio.h>
+#include<limits.h>
+#define INFY 999999999
+long int m[20][20];
+int s[20][20];
+int p[20],i,j,n;
 
-// Matrix Ai has dimension p[i-1] x p[i]
-// for i = 1 . . . n
-int MatrixChainOrder(int p[], int i, int j)
-{
-	if (i == j)
-		return 0;
-	int k;
-	int min = INT_MAX;
-	int count;
-
-	// Place parenthesis at different places
-	// between first and last matrix,
-	// recursively calculate count of multiplications
-	// for each parenthesis placement
-	// and return the minimum count
-	for (k = i; k < j; k++)
-	{
-		count = MatrixChainOrder(p, i, k)
-				+ MatrixChainOrder(p, k + 1, j)
-				+ p[i - 1] * p[k] * p[j];
-
-		if (count < min)
-			min = count;
-	}
-
-	// Return minimum count
-	return min;
+void print_optimal(int i,int j) {
+    if (i == j) printf(" A%d ",i);
+    else {
+        printf("( ");
+        print_optimal(i, s[i][j]);
+        print_optimal(s[i][j] + 1, j);
+        printf(" )");
+    }
 }
 
-// Driver code
-int main()
-{
-	int arr[] = { 1, 2, 3, 4, 3 };
-	int N = sizeof(arr) / sizeof(arr[0]);
+void matmultiply() {
+    long int q;
+    int k;
+    for(i=n;i>0;i--)
+        for(j=i;j<=n;j++) {
+            if(i==j) m[i][j]=0;
+            else {
+                for(k=i;k<j;k++) {
+                    q=m[i][k]+m[k+1][j]+p[i-1]*p[k]*p[j];
+                    if(q<m[i][j]) {
+                        m[i][j]=q;
+                        s[i][j]=k;
+                    }
+                }
+            }
+        }
+}
 
-	// Function call
-	printf("Minimum number of multiplications is %d ",
-		MatrixChainOrder(arr, 1, N - 1));
-	getchar();
-	return 0;
+int MatrixChainOrder(int p[], int i, int j) {
+    if(i == j) return 0;
+    int k;
+    int min = INT_MAX;
+    int count;
+    for (k = i; k <j; k++) {
+        count = MatrixChainOrder(p, i, k) + MatrixChainOrder(p, k+1, j) + 
+                p[i-1]*p[k]*p[j];
+        if (count < min) min = count;
+    }
+    return min;
+}
+
+int main() {
+    int k;
+    printf("Enter the no. of elements: ");
+    scanf("%d",&n);
+    for(i=1;i<=n;i++)
+        for(j=i+1;j<=n;j++) {
+            m[i][i]=0;
+            m[i][j]=INFY;
+            s[i][j]=0;
+        }
+    printf("\nEnter the dimensions: \n");
+    for(k=0;k<=n;k++){
+        printf("P%d: ",k);
+        scanf("%d",&p[k]);
+    }
+    matmultiply();
+    /* Not necessary
+    printf("\nCost Matrix M:\n");
+    for(i=1;i<=n;i++)
+        for(j=i;j<=n;j++)
+            printf("m[%d][%d]: %ld\n",i,j,m[i][j]);
+    */
+    i = 1, j = n;
+    printf("\nMultiplication Sequence : ");
+    print_optimal(i,j);
+    printf("\nMinimum number of multiplications is : %d ", MatrixChainOrder(p, 1, n));
+    return 0;
 }
